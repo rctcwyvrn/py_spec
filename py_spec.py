@@ -53,7 +53,7 @@ else:
 	RUNTIME = int(sys.argv[3])
 
 MAX_DB = 150
-MIN_DB = 10
+#MIN_DB = 50
 BOOST = 10
 
 #plt.plot(frames[0])
@@ -114,7 +114,7 @@ def fft_worker(i):
 	res = abs(val)[:75] + BOOST #take the first 75 values because that's what we care about. also scale it up so it looks nicer
 	res = np.append(res,[res[0]]) #complete the loop
 	res = [MAX_DB if x>MAX_DB else x for x in res] #filter down to maximum value
-	res = [BOOST if x<=BOOST+MIN_DB else x for x in res] #filter down to maximum value
+	#res = [BOOST if x<=BOOST+MIN_DB else x for x in res] #filter down to maximum value
 
 
 
