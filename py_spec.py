@@ -90,18 +90,18 @@ BOOST = 10
 # 	plt.pause(1/frame_rate)
 # 	plt.clf()
 
-def avg(xs):
-	return sum(xs)/bar_width
+# def avg(xs):
+# 	return sum(xs)/bar_width
 
-bar_width = 1
-def bar(ar):
-	splices = []
-	for i in range(0,len(ar),bar_width):
-		splices.append(ar[i:i+bar_width])
+# bar_width = 1
+# def bar(ar):
+# 	splices = []
+# 	for i in range(0,len(ar),bar_width):
+# 		splices.append(ar[i:i+bar_width])
 
-	#print("splices",splices)
-	return np.array([avg(x) for x in splices])
-	#return np.array(list(set([math.floor(x/bar_width)*bar_width for x in ar])))
+# 	#print("splices",splices)
+# 	return np.array([avg(x) for x in splices])
+# 	#return np.array(list(set([math.floor(x/bar_width)*bar_width for x in ar])))
 
 
 def fft_worker(i):

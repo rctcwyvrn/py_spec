@@ -1,3 +1,5 @@
+https://youtu.be/i87schwHTNw
+
 You need a `.wav` audio file
 
 Run py_spec with `python py_spec file.wav <dual|single> <runtime> <show|save>`, which will output `file_spec.mp4`.
