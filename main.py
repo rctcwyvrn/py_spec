@@ -8,8 +8,8 @@ import numpy as np
 import multiprocessing
 import math
 
-# IN_FILENAME = "/home/lily/Documents/draft-1-short.wav"
-IN_FILENAME = "/home/lily/Documents/test.wav"
+IN_FILENAME = "/home/lily/Documents/draft-1.wav"
+# IN_FILENAME = "/home/lily/Documents/test.wav"
 
 NB_BITS = 16
 FRAME_RATE= 10
