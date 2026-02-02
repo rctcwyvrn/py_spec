@@ -1,14 +1,11 @@
 from manim import *
-import sys
-import subprocess
 import scipy.fftpack as fft 
 from scipy.io import wavfile
 from scipy.signal.windows import hann
 import numpy as np
-import multiprocessing
 import math
 
-IN_FILENAME = "/home/lily/Documents/draft-1.wav"
+IN_FILENAME = "/home/lily/Documents/draft-2.wav"
 # IN_FILENAME = "/home/lily/Documents/test.wav"
 
 NB_BITS = 16
@@ -17,8 +14,8 @@ FRAME_RATE= 10
 BUMP = 10
 WORKERS = 16
 
-MAX_DB = 150
-MIN_DB = 50
+MAX_DB = 60
+MIN_DB = 2
 BUMP = 0.5
 
 YOLO_TRUNCATION = 100
@@ -27,11 +24,7 @@ def fft_worker(frame):
     window = hann(len(frame))
     fft_data = abs(fft.fft(window * frame)) # calculate fourier transform (complex numbers list)
     fft_truncated = fft_data[:YOLO_TRUNCATION] # lmao
-    fft_max_capped = [MAX_DB if x > MAX_DB else x for x in fft_truncated]
-    fft_min_bumped = [MIN_DB if x < MIN_DB else x for x in fft_max_capped]
-    fft_normalized = fft_truncated / max(fft_min_bumped)
-    fft_boosted = fft_normalized + BUMP
-    return fft_boosted
+    return fft_truncated
 
 def load_audio():
     sample_rate, x = wavfile.read(IN_FILENAME)
@@ -68,15 +61,18 @@ def load_audio():
 class CreateVisual(Scene):
     def construct(self):
         fft_dict = load_audio()
+        relative_max = max([max(fft) for fft in fft_dict])
         def parametric_frame(frame):
-            res = fft_dict[frame]
-            res_len = len(res)
+            t_range = len(fft_dict[frame]) - 1
+            fft_max_capped = np.array([MAX_DB if x > MAX_DB else x for x in fft_dict[frame]])
+            fft_min_bumped = np.array([MIN_DB if x < MIN_DB else x for x in fft_max_capped])
+            fft_normalized = fft_min_bumped / relative_max
+            scale = fft_normalized + BUMP
             def f(t):
-                 scale = res[int(t)]
-                 return (np.cos(t * (2 * PI) / res_len) * scale, 
-                         np.sin(t * (2 * PI) / res_len) * scale, 
-                         0)
-            return ParametricFunction(f, t_range=(0,res_len-1,1)).scale(3)
+                return (np.cos(t * (2 * PI) / t_range) * scale[int(t)], 
+                        np.sin(t * (2 * PI) / t_range) * scale[int(t)], 
+                        0)
+            return ParametricFunction(f, t_range=(0,t_range,1)).scale(3)
         parametrics = [parametric_frame(frame) for frame in range(len(fft_dict))]
         p = parametrics[0]
         self.add(p)
