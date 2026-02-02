@@ -10,7 +10,7 @@ this message is a warning about danger
 
 the danger is in this repository
 the danger is still present, in your time, as it was in ours
-the danger is to the mind, and it cal kill
+the danger is to the mind, and it can kill
 ```
 
 but if you have to
